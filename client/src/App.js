@@ -4,27 +4,31 @@ import {useHttp} from "./helper/http.hook";
 
 const  App = () => {
     const [inputValue, setInputValue] = useState('')
+    const [person, setPerson] = useState([])
     const {request} = useHttp()
 
-    // const changePerson = (e) => {
-    //     console.log(e.target.value)
-    // }
 
-    const setPerson = async () => {
+    const findPerson = async () => {
         try {
-            const data = await request('/api/person/swperson', 'POST', {name: 'Darth Vader'})
+            const data = await request('/api/person/swperson', 'POST', {name: inputValue})
             console.log(data);
-
+            setPerson(data.person)
         } catch (e) {
             console.log(e.message)
         }
     }
+    const showPerson = person.map(item => {
+        return <div>{item.name}</div>
+    })
+
   return (
     <div className="App">
         <h1>Персонаж из звёзлных воинов </h1>
         <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} type="text"/>
-        <button onClick={setPerson}>Поиск</button>
-
+        <button onClick={findPerson}>Поиск</button>
+        <div>
+            {showPerson}
+        </div>
     </div>
   );
 }
